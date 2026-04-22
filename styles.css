@@ -881,6 +881,77 @@ cite span {
 }
 
 /* ============================================================
+   PUBLICATIONS
+   ============================================================ */
+.pub-group {
+  margin-bottom: 52px;
+}
+.pub-group:last-child {
+  margin-bottom: 0;
+}
+
+.pub-group-title {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--green);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.pub-list {
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pub-list li {
+  font-size: 14.5px;
+  color: var(--text-muted);
+  line-height: 1.75;
+}
+
+.pub-list li a {
+  color: var(--green);
+  word-break: break-all;
+}
+
+.pub-online-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pub-online-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 24px;
+  font-size: 14.5px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+}
+
+.pub-online-list li:last-child {
+  border-bottom: none;
+}
+
+.pub-online-list a {
+  color: var(--green);
+}
+
+.pub-date {
+  color: var(--text-muted);
+  font-size: 13px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ============================================================
    CONTACT
    ============================================================ */
 .contact-container {

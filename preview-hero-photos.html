@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hero Background Preview — Dakota M. Churchill</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #F9F7EB;
+      --green: #1F4C34;
+      --font-sans: 'Inter', system-ui, sans-serif;
+      --font-serif: 'Playfair Display', Georgia, serif;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: #111;
+      color: var(--cream);
+    }
+
+    /* ── Sticky label bar ── */
+    .label-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .label-bar a {
+      flex: 1;
+      text-align: center;
+      padding: 14px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(249,247,235,0.5);
+      text-decoration: none;
+      border-right: 1px solid rgba(255,255,255,0.08);
+      transition: color 0.2s, background 0.2s;
+    }
+    .label-bar a:last-child { border-right: none; }
+    .label-bar a:hover { color: var(--cream); background: rgba(255,255,255,0.05); }
+
+    /* ── Comparison note ── */
+    .note {
+      background: rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 18px 32px;
+      font-size: 12px;
+      color: rgba(249,247,235,0.45);
+      line-height: 1.7;
+    }
+    .note strong { color: rgba(249,247,235,0.75); font-weight: 600; }
+
+    /* ── Hero panel shared styles ── */
+    .hero-panel {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 40px 80px;
+      overflow: hidden;
+      border-bottom: 3px solid rgba(255,255,255,0.12);
+    }
+
+    /* Background layer — photo or gradient fallback */
+    .hero-panel .bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      filter: blur(3px) brightness(0.75);
+      transform: scale(1.05); /* prevent blur edge bleed */
+      transition: filter 0.3s;
+    }
+
+    /* Dark gradient overlay */
+    .hero-panel .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(0,0,0,0.62) 0%,
+        rgba(0,0,0,0.40) 50%,
+        rgba(0,0,0,0.55) 100%
+      );
+      pointer-events: none;
+    }
+
+    /* Photo label badge */
+    .photo-badge {
+      position: absolute;
+      top: 24px;
+      right: 28px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(249,247,235,0.55);
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(249,247,235,0.18);
+      padding: 6px 14px;
+      border-radius: 100px;
+    }
+
+    /* ── Hero content ── */
+    .hero-inner {
+      max-width: 1100px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 72px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-photo-wrap {
+      display: flex;
+      justify-content: center;
+    }
+
+    .hero-photo {
+      width: 260px;
+      height: 320px;
+      border-radius: 3px;
+      overflow: hidden;
+      background: rgba(249,247,235,0.10);
+      border: 2px dashed rgba(249,247,235,0.25);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      color: rgba(249,247,235,0.35);
+    }
+
+    .hero-photo svg { opacity: 0.5; }
+
+    .hero-photo span {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 22px;
+      max-width: 500px;
+    }
+
+    .hero-availability {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(249,247,235,0.65);
+      background: rgba(249,247,235,0.08);
+      border: 1px solid rgba(249,247,235,0.2);
+      padding: 6px 14px 6px 10px;
+      border-radius: 100px;
+    }
+
+    .availability-dot {
+      width: 7px;
+      height: 7px;
+      background: #4ade80;
+      border-radius: 50%;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 2px rgba(74,222,128,0.25);
+      animation: pulse-dot 2.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { box-shadow: 0 0 0 2px rgba(74,222,128,0.25); }
+      50%       { box-shadow: 0 0 0 5px rgba(74,222,128,0.1); }
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(249,247,235,0.55);
+    }
+
+    .hero-name {
+      font-family: var(--font-serif);
+      font-size: clamp(38px, 5vw, 62px);
+      font-weight: 500;
+      color: var(--cream);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-tagline {
+      font-size: 16px;
+      font-weight: 300;
+      color: rgba(249,247,235,0.72);
+      line-height: 1.65;
+      max-width: 420px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding-top: 6px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 24px;
+      border-radius: 2px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-decoration: none;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s;
+    }
+
+    .btn-primary {
+      background: var(--cream);
+      color: var(--green);
+      border-color: var(--cream);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--cream);
+      border-color: rgba(249,247,235,0.45);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(249,247,235,0.1);
+    }
+
+    /* ── Gradient fallbacks (approximate palette of each photo) ── */
+
+    /* 1. Milford Sound — deep teal fjord, dark granite peaks, sky blue */
+    #milford .bg {
+      background-image:
+        url('photos/milford-sound.jpg'),
+        linear-gradient(170deg, #2d6b7a 0%, #1a3d52 35%, #0f2a38 65%, #1c3a28 100%);
+    }
+
+    /* 2. White Mountains — grey-green ridge, open sky, exposed rock */
+    #white-mountains .bg {
+      background-image:
+        url('photos/white-mountains.jpg'),
+        linear-gradient(170deg, #6a8a6e 0%, #3d5e45 30%, #2a4030 60%, #536068 100%);
+    }
+
+    /* 3. Italian Coast — bright Mediterranean blue, warm ochre stone */
+    #italy .bg {
+      background-image:
+        url('photos/italy-coast.jpg'),
+        linear-gradient(170deg, #3a7fbf 0%, #2362a4 35%, #1a4a8a 60%, #8b7355 100%);
+    }
+
+    /* 4. Patagonia / Fitz Roy — crisp blue sky, golden autumn, grey granite */
+    #patagonia .bg {
+      background-image:
+        url('photos/patagonia.jpg'),
+        linear-gradient(170deg, #3d80c4 0%, #2a6298 30%, #1c4a7a 55%, #8b7040 80%, #5a4828 100%);
+    }
+
+    /* ── Scroll hint ── */
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: rgba(249,247,235,0.3);
+      z-index: 1;
+    }
+    .hero-scroll-hint span {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 36px;
+      background: linear-gradient(to bottom, rgba(249,247,235,0.3), transparent);
+    }
+
+    /* ── Overlay slider control ── */
+    .controls {
+      position: absolute;
+      bottom: 80px;
+      right: 28px;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-end;
+    }
+    .controls label {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(249,247,235,0.45);
+    }
+    .controls input[type=range] {
+      width: 100px;
+      accent-color: var(--cream);
+      cursor: pointer;
+    }
+
+    /* ── Instruction panel ── */
+    .instructions {
+      background: #0d1a14;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 48px 40px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .instructions h2 {
+      font-family: var(--font-serif);
+      font-size: 26px;
+      font-weight: 500;
+      color: var(--cream);
+      margin-bottom: 24px;
+    }
+    .instructions p, .instructions li {
+      font-size: 14px;
+      color: rgba(249,247,235,0.6);
+      line-height: 1.75;
+    }
+    .instructions ul { padding-left: 20px; margin: 12px 0 24px; }
+    .instructions li { margin-bottom: 6px; }
+    .instructions code {
+      font-family: 'SF Mono', 'Menlo', monospace;
+      background: rgba(249,247,235,0.08);
+      border: 1px solid rgba(249,247,235,0.12);
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-size: 12px;
+      color: #7dd3a8;
+    }
+    .instructions .filename {
+      color: rgba(249,247,235,0.85);
+      font-weight: 600;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      margin: 32px 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Quick-jump nav -->
+<div class="label-bar">
+  <a href="#milford">① Milford Sound</a>
+  <a href="#white-mountains">② White Mountains</a>
+  <a href="#italy">③ Italian Coast</a>
+  <a href="#patagonia">④ Patagonia</a>
+</div>
+
+<div class="note">
+  <strong>How to read this preview:</strong> Each panel shows your hero section with the dark-gradient + blur treatment applied to a different photo.
+  If you haven't saved the images yet, you'll see gradient approximations of each photo's color palette — the text contrast and layout are identical either way.
+  Save your photos to a <code>photos/</code> folder in this project (filenames listed at the bottom) to see the real images.
+  Use the overlay slider on each panel to adjust darkness.
+</div>
+
+<!-- ════════════════════════════════════════════════
+     PANEL 1 — Milford Sound
+     ════════════════════════════════════════════════ -->
+<section class="hero-panel" id="milford">
+  <div class="bg" id="bg-milford"></div>
+  <div class="overlay" id="overlay-milford"></div>
+  <span class="photo-badge">① Milford Sound, New Zealand</span>
+
+  <div class="hero-inner">
+    <div class="hero-photo-wrap">
+      <div class="hero-photo">
+        <svg width="56" height="56" viewBox="0 0 80 80" fill="none"><rect x="8" y="20" width="64" height="48" rx="4" stroke="#F9F7EB" stroke-width="2.5"/><circle cx="26" cy="36" r="7" stroke="#F9F7EB" stroke-width="2.5"/><path d="M8 52l18-14 14 10 12-8 20 14" stroke="#F9F7EB" stroke-width="2.5" stroke-linejoin="round"/></svg>
+        <span>Your headshot</span>
+      </div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-availability">
+        <span class="availability-dot" aria-hidden="true"></span>
+        Open to new opportunities
+      </div>
+      <p class="hero-eyebrow">Technical Project Manager</p>
+      <h1 class="hero-name">Dakota M. Churchill</h1>
+      <p class="hero-tagline">Turning operational complexity into measurable outcomes — across product, engineering, and data teams.</p>
+      <div class="hero-ctas">
+        <a href="#" class="btn btn-primary">Connect on LinkedIn</a>
+        <a href="#" class="btn btn-secondary">View Resume</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <label for="slider-milford">Overlay darkness</label>
+    <input type="range" id="slider-milford" min="0" max="85" value="52" oninput="setOverlay('overlay-milford', this.value)">
+  </div>
+
+  <div class="hero-scroll-hint" aria-hidden="true">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     PANEL 2 — White Mountains
+     ════════════════════════════════════════════════ -->
+<section class="hero-panel" id="white-mountains">
+  <div class="bg" id="bg-white-mountains"></div>
+  <div class="overlay" id="overlay-white-mountains"></div>
+  <span class="photo-badge">② White Mountains, New Hampshire</span>
+
+  <div class="hero-inner">
+    <div class="hero-photo-wrap">
+      <div class="hero-photo">
+        <svg width="56" height="56" viewBox="0 0 80 80" fill="none"><rect x="8" y="20" width="64" height="48" rx="4" stroke="#F9F7EB" stroke-width="2.5"/><circle cx="26" cy="36" r="7" stroke="#F9F7EB" stroke-width="2.5"/><path d="M8 52l18-14 14 10 12-8 20 14" stroke="#F9F7EB" stroke-width="2.5" stroke-linejoin="round"/></svg>
+        <span>Your headshot</span>
+      </div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-availability">
+        <span class="availability-dot" aria-hidden="true"></span>
+        Open to new opportunities
+      </div>
+      <p class="hero-eyebrow">Technical Project Manager</p>
+      <h1 class="hero-name">Dakota M. Churchill</h1>
+      <p class="hero-tagline">Turning operational complexity into measurable outcomes — across product, engineering, and data teams.</p>
+      <div class="hero-ctas">
+        <a href="#" class="btn btn-primary">Connect on LinkedIn</a>
+        <a href="#" class="btn btn-secondary">View Resume</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <label for="slider-wm">Overlay darkness</label>
+    <input type="range" id="slider-wm" min="0" max="85" value="52" oninput="setOverlay('overlay-white-mountains', this.value)">
+  </div>
+
+  <div class="hero-scroll-hint" aria-hidden="true">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     PANEL 3 — Italian Coast
+     ════════════════════════════════════════════════ -->
+<section class="hero-panel" id="italy">
+  <div class="bg" id="bg-italy"></div>
+  <div class="overlay" id="overlay-italy"></div>
+  <span class="photo-badge">③ Italian Coast</span>
+
+  <div class="hero-inner">
+    <div class="hero-photo-wrap">
+      <div class="hero-photo">
+        <svg width="56" height="56" viewBox="0 0 80 80" fill="none"><rect x="8" y="20" width="64" height="48" rx="4" stroke="#F9F7EB" stroke-width="2.5"/><circle cx="26" cy="36" r="7" stroke="#F9F7EB" stroke-width="2.5"/><path d="M8 52l18-14 14 10 12-8 20 14" stroke="#F9F7EB" stroke-width="2.5" stroke-linejoin="round"/></svg>
+        <span>Your headshot</span>
+      </div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-availability">
+        <span class="availability-dot" aria-hidden="true"></span>
+        Open to new opportunities
+      </div>
+      <p class="hero-eyebrow">Technical Project Manager</p>
+      <h1 class="hero-name">Dakota M. Churchill</h1>
+      <p class="hero-tagline">Turning operational complexity into measurable outcomes — across product, engineering, and data teams.</p>
+      <div class="hero-ctas">
+        <a href="#" class="btn btn-primary">Connect on LinkedIn</a>
+        <a href="#" class="btn btn-secondary">View Resume</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <label for="slider-italy">Overlay darkness</label>
+    <input type="range" id="slider-italy" min="0" max="85" value="52" oninput="setOverlay('overlay-italy', this.value)">
+  </div>
+
+  <div class="hero-scroll-hint" aria-hidden="true">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     PANEL 4 — Patagonia
+     ════════════════════════════════════════════════ -->
+<section class="hero-panel" id="patagonia">
+  <div class="bg" id="bg-patagonia"></div>
+  <div class="overlay" id="overlay-patagonia"></div>
+  <span class="photo-badge">④ Patagonia / Fitz Roy, Argentina</span>
+
+  <div class="hero-inner">
+    <div class="hero-photo-wrap">
+      <div class="hero-photo">
+        <svg width="56" height="56" viewBox="0 0 80 80" fill="none"><rect x="8" y="20" width="64" height="48" rx="4" stroke="#F9F7EB" stroke-width="2.5"/><circle cx="26" cy="36" r="7" stroke="#F9F7EB" stroke-width="2.5"/><path d="M8 52l18-14 14 10 12-8 20 14" stroke="#F9F7EB" stroke-width="2.5" stroke-linejoin="round"/></svg>
+        <span>Your headshot</span>
+      </div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-availability">
+        <span class="availability-dot" aria-hidden="true"></span>
+        Open to new opportunities
+      </div>
+      <p class="hero-eyebrow">Technical Project Manager</p>
+      <h1 class="hero-name">Dakota M. Churchill</h1>
+      <p class="hero-tagline">Turning operational complexity into measurable outcomes — across product, engineering, and data teams.</p>
+      <div class="hero-ctas">
+        <a href="#" class="btn btn-primary">Connect on LinkedIn</a>
+        <a href="#" class="btn btn-secondary">View Resume</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <label for="slider-pat">Overlay darkness</label>
+    <input type="range" id="slider-pat" min="0" max="85" value="52" oninput="setOverlay('overlay-patagonia', this.value)">
+  </div>
+
+  <div class="hero-scroll-hint" aria-hidden="true">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     Instructions
+     ════════════════════════════════════════════════ -->
+<div class="instructions">
+  <h2>To load your actual photos</h2>
+  <p>Create a <span class="filename">photos/</span> folder inside this project directory and save each image with the filename below. The page will automatically show the real photo instead of the gradient approximation.</p>
+  <ul>
+    <li>① Milford Sound → <code>photos/milford-sound.jpg</code></li>
+    <li>② White Mountains → <code>photos/white-mountains.jpg</code></li>
+    <li>③ Italian Coast → <code>photos/italy-coast.jpg</code></li>
+    <li>④ Patagonia → <code>photos/patagonia.jpg</code></li>
+  </ul>
+
+  <hr class="divider">
+
+  <p>Once you've chosen a photo, tell me which one you prefer and I'll apply it directly to <code>index.html</code> and <code>styles.css</code> — including the blur, overlay, and any color adjustments needed for the rest of the site.</p>
+</div>
+
+<script>
+  function setOverlay(id, value) {
+    const el = document.getElementById(id);
+    const opacity = value / 100;
+    el.style.background = `linear-gradient(
+      135deg,
+      rgba(0,0,0,${opacity}) 0%,
+      rgba(0,0,0,${opacity * 0.75}) 50%,
+      rgba(0,0,0,${opacity * 0.9}) 100%
+    )`;
+  }
+</script>
+</body>
+</html>

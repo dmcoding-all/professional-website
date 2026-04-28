@@ -869,6 +869,39 @@ cite span {
   margin-bottom: 18px;
 }
 
+.personal-card p a {
+  color: var(--green);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.2s;
+}
+
+.personal-card p a:hover {
+  text-decoration-color: var(--green);
+}
+
+.personal-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 18px 0;
+}
+
+.personal-list li {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  line-height: 1.75;
+  padding: 4px 0 4px 14px;
+  position: relative;
+}
+
+.personal-list li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--green);
+  opacity: 0.7;
+}
+
 .personal-tag {
   font-size: 10px;
   font-weight: 700;

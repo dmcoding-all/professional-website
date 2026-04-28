@@ -395,16 +395,13 @@ a   { color: inherit; }
   font-weight: 600;
 }
 
-.scroll-line {
-  width: 1px;
-  height: 40px;
-  background: linear-gradient(to bottom, rgba(249,247,235,0.35), transparent);
+.scroll-arrow {
   animation: scroll-pulse 2s ease-in-out infinite;
 }
 
 @keyframes scroll-pulse {
-  0%, 100% { opacity: 0.4; transform: scaleY(1); }
-  50%       { opacity: 1;   transform: scaleY(0.7); }
+  0%, 100% { opacity: 0.5; transform: translateY(0); }
+  50%       { opacity: 1;   transform: translateY(5px); }
 }
 
 /* ============================================================

@@ -181,6 +181,8 @@ a   { color: inherit; }
   display: flex;
   gap: 32px;
   margin-left: auto;
+  flex-wrap: nowrap;
+  align-items: center;
 }
 
 .nav-links a {
@@ -191,6 +193,7 @@ a   { color: inherit; }
   color: rgba(249, 247, 235, 0.72);
   text-decoration: none;
   transition: color 0.2s;
+  white-space: nowrap;
 }
 .nav-links a:hover { color: var(--cream); }
 

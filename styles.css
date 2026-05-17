@@ -1221,3 +1221,108 @@ cite span {
   .hero-ctas { flex-direction: column; width: 100%; }
   .hero-ctas .btn { text-align: center; }
 }
+
+/* ============================================================
+   SELECTED IMPACT / HIGHLIGHT REEL
+   ============================================================ */
+.section-highlight {
+  background: var(--green);
+}
+
+.section-title--light {
+  color: var(--cream);
+}
+
+.highlight-reel {
+  list-style: none;
+  border: 1px solid rgba(249, 247, 235, 0.15);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.highlight-reel li {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  align-items: center;
+  gap: 32px;
+  padding: 22px 28px;
+  border-bottom: 1px solid rgba(249, 247, 235, 0.1);
+  transition: background 0.15s;
+}
+
+.highlight-reel li:last-child { border-bottom: none; }
+.highlight-reel li:hover { background: rgba(249, 247, 235, 0.05); }
+
+.hl-stat {
+  font-family: var(--font-serif);
+  font-size: 34px;
+  font-weight: 500;
+  color: var(--cream);
+  text-align: right;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.hl-desc {
+  font-size: 16px;
+  color: rgba(249, 247, 235, 0.82);
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .highlight-reel li {
+    grid-template-columns: 70px 1fr;
+    gap: 20px;
+    padding: 18px 20px;
+  }
+  .hl-stat { font-size: 26px; }
+  .hl-desc { font-size: 14px; }
+}
+
+/* ============================================================
+   PUBLICATIONS COLLAPSIBLE
+   ============================================================ */
+.publications-details {
+  width: 100%;
+}
+
+.publications-summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 52px;
+  user-select: none;
+}
+
+.publications-summary::-webkit-details-marker { display: none; }
+
+.publications-summary .section-title {
+  margin-bottom: 0;
+}
+
+.pub-toggle-btn {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--green);
+  border: 1px solid var(--green);
+  padding: 7px 16px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  transition: background 0.2s, color 0.2s;
+}
+
+.publications-summary:hover .pub-toggle-btn {
+  background: var(--green);
+  color: var(--cream);
+}
+
+.pub-hint-close { display: none; }
+.publications-details[open] .pub-hint-open { display: none; }
+.publications-details[open] .pub-hint-close { display: inline; }

@@ -27,7 +27,7 @@
 
   --max-w: 1100px;
   --pad-x: 40px;
-  --section-y: 100px;
+  --section-y: 64px;
 }
 
 html {
@@ -1105,7 +1105,7 @@ cite span {
 @media (max-width: 1024px) {
   :root {
     --pad-x: 32px;
-    --section-y: 80px;
+    --section-y: 52px;
   }
 
   .hero-inner {
@@ -1130,7 +1130,7 @@ cite span {
 @media (max-width: 768px) {
   :root {
     --pad-x: 24px;
-    --section-y: 64px;
+    --section-y: 40px;
   }
 
   /* Nav */
@@ -1227,8 +1227,8 @@ cite span {
    ============================================================ */
 .section-highlight {
   background: var(--green);
-  padding-top: 56px;
-  padding-bottom: 56px;
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 
 .section-title--light {

@@ -1227,6 +1227,8 @@ cite span {
    ============================================================ */
 .section-highlight {
   background: var(--green);
+  padding-top: 56px;
+  padding-bottom: 56px;
 }
 
 .section-title--light {
@@ -1242,10 +1244,10 @@ cite span {
 
 .highlight-reel li {
   display: grid;
-  grid-template-columns: 90px 1fr;
+  grid-template-columns: 80px 1fr;
   align-items: center;
-  gap: 32px;
-  padding: 22px 28px;
+  gap: 28px;
+  padding: 13px 24px;
   border-bottom: 1px solid rgba(249, 247, 235, 0.1);
   transition: background 0.15s;
 }
@@ -1255,7 +1257,7 @@ cite span {
 
 .hl-stat {
   font-family: var(--font-serif);
-  font-size: 34px;
+  font-size: 26px;
   font-weight: 500;
   color: var(--cream);
   text-align: right;
@@ -1264,19 +1266,28 @@ cite span {
 }
 
 .hl-desc {
-  font-size: 16px;
+  font-size: 14.5px;
   color: rgba(249, 247, 235, 0.82);
-  line-height: 1.5;
+  line-height: 1.45;
+}
+
+.section-highlight .section-label {
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+}
+
+.section-highlight .section-title {
+  margin-bottom: 24px;
 }
 
 @media (max-width: 600px) {
   .highlight-reel li {
-    grid-template-columns: 70px 1fr;
-    gap: 20px;
-    padding: 18px 20px;
+    grid-template-columns: 60px 1fr;
+    gap: 16px;
+    padding: 11px 16px;
   }
-  .hl-stat { font-size: 26px; }
-  .hl-desc { font-size: 14px; }
+  .hl-stat { font-size: 20px; }
+  .hl-desc { font-size: 13px; }
 }
 
 /* ============================================================
